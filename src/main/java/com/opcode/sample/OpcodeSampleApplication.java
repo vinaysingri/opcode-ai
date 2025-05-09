@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 )
 public class OpcodeSampleApplication {
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         SpringApplication.run(OpcodeSampleApplication.class, args);
     }
 }

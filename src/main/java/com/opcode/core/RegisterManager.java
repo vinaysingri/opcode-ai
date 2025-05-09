@@ -1,102 +1,90 @@
 package com.opcode.core;
 
 import com.opcode.exception.InvalidRegisterException;
+import org.springframework.stereotype.Component;
 import java.util.Collections;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Manages the state of the microprocessor's registers.
- * The microprocessor has 4 registers (A, B, C, D), each capable of storing 32-bit signed integers.
  */
+@Component
 public class RegisterManager {
-    private final Map<RegisterName, Register> registers;
+    
+    private final Map<String, Integer> registers;
     
     /**
-     * Constructs a new RegisterManager with all registers initialized to 0.
+     * Constructs a new RegisterManager and initializes all registers to zero.
      */
     public RegisterManager() {
-        registers = new EnumMap<>(RegisterName.class);
-        // Initialize all registers
-        for (RegisterName name : RegisterName.values()) {
-            registers.put(name, new Register(name));
-        }
+        registers = new HashMap<>();
+        // Initialize registers A, B, C, D with value 0
+        registers.put("A", 0);
+        registers.put("B", 0);
+        registers.put("C", 0);
+        registers.put("D", 0);
     }
     
     /**
-     * Gets the value of the specified register.
+     * Gets the value of a specific register.
      *
-     * @param registerName the register name
+     * @param register the register name
      * @return the value of the register
      * @throws InvalidRegisterException if the register name is invalid
      */
-    public Integer getValue(String registerName) {
-        RegisterName name = validateAndGetRegisterName(registerName);
-        return registers.get(name).getValue();
+    public Integer getValue(String register) {
+        validateRegister(register);
+        return registers.get(register);
     }
     
     /**
-     * Sets the value of the specified register.
+     * Sets the value of a specific register.
      *
-     * @param registerName the register name
+     * @param register the register name
      * @param value the value to set
      * @throws InvalidRegisterException if the register name is invalid
      */
-    public void setValue(String registerName, Integer value) {
-        RegisterName name = validateAndGetRegisterName(registerName);
-        registers.get(name).setValue(value);
+    public void setValue(String register, Integer value) {
+        validateRegister(register);
+        registers.put(register, value);
     }
     
     /**
-     * Resets all registers to 0.
+     * Resets all registers to zero.
      */
     public void reset() {
-        registers.values().forEach(Register::reset);
+        registers.replaceAll((k, v) -> 0);
     }
     
     /**
      * Gets an unmodifiable view of all registers and their values.
      *
-     * @return an unmodifiable map of register names to values
+     * @return map of register names to their values
      */
     public Map<String, Integer> getAllRegisters() {
-        return Collections.unmodifiableMap(
-            registers.entrySet().stream()
-                .collect(Collectors.toMap(
-                    e -> e.getKey().toString(),
-                    e -> e.getValue().getValue()
-                ))
-        );
+        return Collections.unmodifiableMap(registers);
     }
     
     /**
-     * Checks if the specified register name is valid.
+     * Checks if a register name is valid.
      *
-     * @param registerName the register name to check
-     * @return true if the register name is valid, false otherwise
+     * @param register the register name to check
+     * @return true if the register is valid, false otherwise
      */
-    public boolean isValidRegister(String registerName) {
-        try {
-            RegisterName.fromString(registerName);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+    public boolean isValidRegister(String register) {
+        return registers.containsKey(register);
     }
     
     /**
-     * Validates and converts a register name string to RegisterName enum.
+     * Validates a register name.
      *
-     * @param registerName the register name to validate
-     * @return the validated RegisterName
+     * @param register the register name to validate
      * @throws InvalidRegisterException if the register name is invalid
      */
-    private RegisterName validateAndGetRegisterName(String registerName) {
-        try {
-            return RegisterName.fromString(registerName);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidRegisterException("Invalid register: " + registerName);
+    private void validateRegister(String register) {
+        if (!isValidRegister(register)) {
+            throw new InvalidRegisterException("Invalid register: " + register);
         }
     }
 }
