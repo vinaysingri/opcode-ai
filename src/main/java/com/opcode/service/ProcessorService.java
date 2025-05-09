@@ -81,4 +81,14 @@ public class ProcessorService {
     public Integer getRegisterValue(String register) {
         return processor.getRegisterValue(register);
     }
+    
+    /**
+     * Resets all registers to zero by executing the RST instruction.
+     *
+     * @return a map of register names to their values (all zero)
+     */
+    public Map<String, Integer> resetProcessor() {
+        processor.executeInstruction("RST");
+        return processor.getAllRegisterValues();
+    }
 }

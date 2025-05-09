@@ -242,4 +242,27 @@ public class ProcessorControllerTest {
         
         verify(processorService).getRegisterValue("X");
     }
+    
+    @Test
+    void testResetProcessor() throws Exception {
+        // Arrange
+        Map<String, Integer> resetRegisters = new HashMap<>();
+        resetRegisters.put("A", 0);
+        resetRegisters.put("B", 0);
+        resetRegisters.put("C", 0);
+        resetRegisters.put("D", 0);
+        
+        when(processorService.resetProcessor()).thenReturn(resetRegisters);
+        
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/processor/reset"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("success"))
+                .andExpect(jsonPath("$.registers.A").value(0))
+                .andExpect(jsonPath("$.registers.B").value(0))
+                .andExpect(jsonPath("$.registers.C").value(0))
+                .andExpect(jsonPath("$.registers.D").value(0));
+        
+        verify(processorService).resetProcessor();
+    }
 }

@@ -115,4 +115,21 @@ public class ProcessorController {
         Integer value = processorService.getRegisterValue(register);
         return ResponseEntity.ok(new RegisterValueResponse(value));
     }
+    
+    /**
+     * Resets all registers to zero.
+     *
+     * @return the processor response with all registers set to zero
+     */
+    @Operation(summary = "Reset all registers",
+               description = "Sets all registers back to their initial state of zero")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully reset all registers",
+                    content = @Content(schema = @Schema(implementation = ProcessorResponse.class)))
+    })
+    @PostMapping("/processor/reset")
+    public ResponseEntity<ProcessorResponse> resetProcessor() {
+        Map<String, Integer> registers = processorService.resetProcessor();
+        return ResponseEntity.ok(ProcessorResponse.success(registers));
+    }
 }

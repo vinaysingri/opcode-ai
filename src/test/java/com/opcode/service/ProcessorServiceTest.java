@@ -214,4 +214,30 @@ public class ProcessorServiceTest {
             () -> verify(processor, never()).executeInstruction("ADR A B")
         );
     }
+    
+    @Test
+    void testResetProcessor() {
+        // Arrange
+        Map<String, Integer> resetRegisters = new HashMap<>();
+        resetRegisters.put("A", 0);
+        resetRegisters.put("B", 0);
+        resetRegisters.put("C", 0);
+        resetRegisters.put("D", 0);
+        
+        when(processor.getAllRegisterValues()).thenReturn(resetRegisters);
+        
+        // Act
+        Map<String, Integer> result = service.resetProcessor();
+        
+        // Assert
+        assertAll(
+            () -> verify(processor).executeInstruction("RST"),
+            () -> verify(processor).getAllRegisterValues(),
+            () -> assertEquals(resetRegisters, result),
+            () -> assertEquals(0, result.get("A")),
+            () -> assertEquals(0, result.get("B")),
+            () -> assertEquals(0, result.get("C")),
+            () -> assertEquals(0, result.get("D"))
+        );
+    }
 }
