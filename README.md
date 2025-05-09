@@ -182,11 +182,57 @@ curl -X POST http://localhost:8080/api/v1/processor/reset
 ./gradlew bootRun
 ```
 
+### Running the Application
+
+1. **Prerequisites**
+   - Java 17 or later
+   - Gradle 7.x or later
+
+2. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd opcode-sample
+   ```
+
+3. **Build and Run**
+   ```bash
+   # Build the project
+   ./gradlew build
+
+   # Run the application
+   ./gradlew bootRun
+   ```
+
+   The application will start on `http://localhost:8080`
+
 ### API Documentation
-Once the application is running, access the Swagger UI at:
-```
-http://localhost:8080/swagger-ui.html
-```
+
+The project uses Springdoc OpenAPI for API documentation. Once the application is running, you can access:
+
+1. **Swagger UI**
+   ```
+   http://localhost:8080/swagger-ui.html
+   ```
+   - Interactive API documentation
+   - Test API endpoints directly from the browser
+   - View request/response schemas
+   - Try out different instruction combinations
+
+2. **OpenAPI Specification**
+   ```
+   http://localhost:8080/v3/api-docs
+   ```
+   - Raw OpenAPI specification in JSON format
+   - Can be imported into API tools like Postman
+   - Complete API schema and endpoint definitions
+
+3. **OpenAPI YAML**
+   ```
+   http://localhost:8080/v3/api-docs.yaml
+   ```
+   - YAML version of the OpenAPI specification
+   - Human-readable format
+   - Useful for API documentation tools
 
 ## Architecture
 
