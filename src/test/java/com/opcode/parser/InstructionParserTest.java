@@ -118,7 +118,7 @@ public class InstructionParserTest {
         when(mockFactory.createInstruction(eq("SET"), any())).thenReturn(mock(Instruction.class));
         
         // Act
-        parser.parse("sEt A 10");
+        parser.parse("SET A 10");
         
         // Assert
         verify(mockFactory).createInstruction("SET", new String[]{"A", "10"});

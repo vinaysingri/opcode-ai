@@ -1,121 +1,69 @@
-# Active Context: Opcode Microprocessor Simulator
+# Active Context
 
-## Current Work Focus
-
-The project is currently in the initial setup phase. The basic Spring Boot application structure has been created with a dummy controller, service, and model. The focus now is on implementing the core domain model and the first API endpoint for executing a single instruction.
-
-### Current Task
-
-**Task 1: Core Domain Model Implementation**
-
-This task involves:
-- Implementing the register manager and basic exception handling
-- Creating the instruction interface and abstract base class
-- Writing unit tests for the core components
+## Current Focus
+- Implementing the Opcode Microprocessor Simulator
+- Completed Task 2: Execute Single Instruction API
+- Next up: Task 3: Execute Batch Instructions API
 
 ## Recent Changes
+1. Implemented core instruction classes:
+   - SET: Sets a register to a specific value
+   - ADR: Adds content of one register to another
+   - ADD: Adds a constant value to a register
+   - MOV: Copies value from one register to another
+   - INR: Increments a register by 1
+   - DCR: Decrements a register by 1
+   - RST: Resets all registers to zero
 
-1. **Project Initialization**
-   - Created Spring Boot application structure
-   - Set up Gradle build configuration
-   - Added Swagger/OpenAPI documentation support
-   - Implemented a dummy controller for testing the setup
+2. Created supporting components:
+   - InstructionFactory for creating instruction instances
+   - InstructionParser for parsing instruction text
+   - Processor facade for coordinating execution
+   - ProcessorService for business logic
+   - REST controller with error handling
 
-2. **Register Implementation**
-   - Created RegisterName enum to define valid registers (A, B, C, D)
-   - Implemented Register class to encapsulate register state
-   - Updated RegisterManager to use enum-based approach
-   - Improved type safety and maintainability
-   - Added comprehensive unit tests
+3. Added comprehensive testing:
+   - Unit tests for all components
+   - Integration tests for end-to-end flows
+   - Test coverage for success and error scenarios
 
-3. **Documentation**
-   - Created comprehensive technical specification
-   - Defined API specification
-   - Developed implementation plan with task breakdown
-   - Established memory bank for project documentation
-
-## Next Steps
-
-1. **Complete Task 1: Core Domain Model Implementation**
-   - Implement `RegisterManager` class
-   - Create `Instruction` interface and `AbstractInstruction` class
-   - Implement exception classes
-   - Write unit tests for these components
-
-2. **Proceed to Task 2: Execute Single Instruction API**
-   - Implement concrete instruction classes (SET, ADR, ADD, MOV, INR, DCR, RST)
-   - Create instruction factory and parser
-   - Implement processor core functionality
-   - Create service method for executing a single instruction
-   - Implement POST /api/v1/instructions endpoint
-   - Write unit and integration tests
-
-## Active Decisions and Considerations
-
-1. **Package Structure**
-   - Decided to use a feature-based package structure
-   - Core domain logic will be in `com.opcode.sample.core`
-   - Instructions will be in `com.opcode.sample.instruction`
-   - Exception handling will be in `com.opcode.sample.exception`
-
-2. **Testing Strategy**
-   - Using JUnit 5 for unit testing
-   - MockMvc for controller testing
-   - Spring Boot Test for integration testing
-   - Aiming for high test coverage, especially for instruction execution logic
-
-3. **API Design Considerations**
-   - RESTful endpoints following best practices
-   - Clear request/response formats
-   - Comprehensive error handling
-   - Swagger/OpenAPI documentation
-
-4. **Implementation Approach**
-   - Following the implementation plan tasks in sequence
-   - Using TDD approach where appropriate
-   - Focusing on clean, maintainable code
-   - Ensuring extensibility for future enhancements
+## Active Decisions
+1. Using Command pattern for instruction implementation
+2. Using Factory pattern for instruction creation
+3. Using Spring dependency injection for component wiring
+4. Implementing proper error handling with specific exception types
+5. Following REST best practices for API design
 
 ## Important Patterns and Preferences
+1. Code Organization:
+   - Core domain in com.opcode.core
+   - Instructions in com.opcode.instruction
+   - API components in controller/service layers
+   - Clear separation of concerns
 
-1. **Code Style**
-   - Using Java 17 features where appropriate
-   - Following Spring Boot conventions
-   - Leveraging Lombok to reduce boilerplate
-   - Clear naming conventions for classes, methods, and variables
-   - Using enums for type-safe constants
+2. Error Handling:
+   - Custom exceptions for different error types
+   - Global exception handler for consistent responses
+   - HTTP status codes aligned with REST conventions
 
-2. **Design Patterns in Use**
-   - Command Pattern for instructions
-   - Factory Pattern for instruction creation
-   - Registry Pattern for register management
-   - Facade Pattern for processor interface
+3. Testing Strategy:
+   - Unit tests for individual components
+   - Integration tests for end-to-end flows
+   - Mock MVC for controller testing
+   - TestRestTemplate for integration testing
 
-3. **Error Handling**
-   - Custom exceptions for specific error scenarios
-   - Global exception handler for consistent API responses
-   - Detailed error messages for debugging
+## Recent Learnings
+1. Spring Boot dependency injection setup:
+   - Need @Component annotations on beans
+   - Constructor injection preferred over field injection
+   - Proper component scanning configuration required
 
-4. **Documentation**
-   - Comprehensive Javadoc comments
-   - Swagger/OpenAPI annotations for API documentation
-   - README with setup and usage instructions
+2. Error handling improvements:
+   - Added specific handler for JSON parsing errors
+   - Consistent error response format
+   - Proper HTTP status codes for different errors
 
-## Learnings and Project Insights
-
-1. **Key Insights**
-   - The command pattern provides a clean way to implement the various instructions
-   - Using a factory for instruction creation simplifies adding new instructions
-   - Using enums for register names provides compile-time safety
-   - Proper encapsulation of register state improves maintainability
-   - The register manager abstraction makes it easy to extend with new registers
-
-2. **Challenges**
-   - Ensuring proper validation of instruction syntax
-   - Handling edge cases like integer overflow/underflow
-   - Maintaining clean separation of concerns
-
-3. **Opportunities for Improvement**
-   - Consider adding logging for instruction execution
-   - Explore performance optimizations for batch instruction execution
-   - Investigate adding support for instruction history/undo
+3. Testing insights:
+   - MockMvc vs TestRestTemplate usage
+   - Proper test organization and naming
+   - Effective use of test utilities and assertions
