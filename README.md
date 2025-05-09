@@ -267,3 +267,31 @@ graph TD
 
 ## License
 [MIT License](LICENSE)
+
+## Development Tools & Resources
+
+### Cursor Directory Integration
+This project utilizes [Cursor Directory](https://cursor.directory/) - a community hub for Cursor enthusiasts that provides:
+- Curated collection of Cursor rules and best practices
+- Access to MCP (Model Context Protocol) servers for extended capabilities
+- Community-driven development patterns and standards
+- Integration with modern development workflows
+
+The project's `.cursor/rules` directory contains coding standards that ensure:
+- Consistent Java and Spring Boot practices
+- Clean code architecture
+- Comprehensive testing approaches
+- Security and performance considerations
+
+### Cline Prompting
+The development process is enhanced through [Cline's advanced prompting capabilities](https://docs.cline.bot/improving-your-prompting-skills/prompting), which enable:
+- Documentation-driven development
+- Memory Bank system for maintaining context
+- Plan & Act modes for structured development
+- Effective code analysis and improvement
+
+These tools combine to create a robust development environment that promotes:
+- High-quality code through consistent standards
+- Clear documentation and knowledge sharing
+- Efficient development workflows
+- Collaborative team practices
