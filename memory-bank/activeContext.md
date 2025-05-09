@@ -21,7 +21,14 @@ This task involves:
    - Added Swagger/OpenAPI documentation support
    - Implemented a dummy controller for testing the setup
 
-2. **Documentation**
+2. **Register Implementation**
+   - Created RegisterName enum to define valid registers (A, B, C, D)
+   - Implemented Register class to encapsulate register state
+   - Updated RegisterManager to use enum-based approach
+   - Improved type safety and maintainability
+   - Added comprehensive unit tests
+
+3. **Documentation**
    - Created comprehensive technical specification
    - Defined API specification
    - Developed implementation plan with task breakdown
@@ -76,6 +83,7 @@ This task involves:
    - Following Spring Boot conventions
    - Leveraging Lombok to reduce boilerplate
    - Clear naming conventions for classes, methods, and variables
+   - Using enums for type-safe constants
 
 2. **Design Patterns in Use**
    - Command Pattern for instructions
@@ -98,6 +106,8 @@ This task involves:
 1. **Key Insights**
    - The command pattern provides a clean way to implement the various instructions
    - Using a factory for instruction creation simplifies adding new instructions
+   - Using enums for register names provides compile-time safety
+   - Proper encapsulation of register state improves maintainability
    - The register manager abstraction makes it easy to extend with new registers
 
 2. **Challenges**

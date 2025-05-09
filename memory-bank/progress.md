@@ -25,10 +25,16 @@ The project is currently in the early stages of development. The basic Spring Bo
    - ✅ Basic service structure
    - ✅ Model classes for responses
 
+4. **Core Components**
+   - ✅ RegisterName enum for type-safe register identification
+   - ✅ Register class with proper encapsulation
+   - ✅ RegisterManager with enum-based implementation
+   - ✅ Unit tests for register components
+
 ## What's Left to Build
 
 ### Task 1: Core Domain Model Implementation
-- ⬜ RegisterManager class
+- ✅ RegisterManager class
 - ⬜ Instruction interface
 - ⬜ AbstractInstruction class
 - ⬜ Exception classes
@@ -105,7 +111,8 @@ gantt
 3. **Registry Pattern for Register Management**
    - Initial Decision: Implement a registry to manage registers
    - Rationale: Makes it easy to add new registers and provides a consistent interface for register operations
-   - Status: Planned for implementation
+   - Status: Implemented with enum-based type safety
+   - Update: Enhanced with RegisterName enum and proper encapsulation for better type safety and maintainability
 
 ### API Design Decisions
 

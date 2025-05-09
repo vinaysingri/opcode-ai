@@ -99,26 +99,50 @@ classDiagram
 - Makes it easy to add new instruction types
 - Encapsulates the instantiation logic
 
-### 3. Registry Pattern
+### 3. Registry Pattern with Type Safety
 
-The `RegisterManager` implements a registry pattern to manage register state.
+The register management system uses enums and proper encapsulation to provide type-safe register operations.
 
 ```mermaid
 classDiagram
+    class RegisterName {
+        <<enumeration>>
+        A
+        B
+        C
+        D
+        +fromString(String) RegisterName
+        +toString() String
+    }
+
+    class Register {
+        -RegisterName name
+        -int value
+        +getName() RegisterName
+        +getValue() int
+        +setValue(int)
+        +reset()
+    }
+
     class RegisterManager {
-        -Map~String, Integer~ registers
+        -Map~RegisterName, Register~ registers
         +getValue(String register)
         +setValue(String register, Integer value)
         +reset()
         +getAllRegisters()
         +isValidRegister(String register)
     }
+
+    RegisterManager --> "4" Register
+    Register --> "1" RegisterName
 ```
 
 **Benefits**:
-- Centralizes register state management
-- Makes it easy to add new registers
-- Provides a consistent interface for register operations
+- Compile-time type safety with enums
+- Proper encapsulation of register state
+- Centralized register management
+- Easy to extend with new registers
+- Clear separation of concerns
 
 ### 4. Facade Pattern
 
@@ -183,14 +207,31 @@ classDiagram
         +getAllRegisterValues()
     }
     
+    class RegisterName {
+        <<enumeration>>
+        A, B, C, D
+    }
+
+    class Register {
+        -RegisterName name
+        -int value
+        +getName()
+        +getValue()
+        +setValue()
+        +reset()
+    }
+
     class RegisterManager {
-        -Map~String, Integer~ registers
+        -Map~RegisterName, Register~ registers
         +getValue(String)
         +setValue(String, Integer)
         +reset()
         +getAllRegisters()
         +isValidRegister(String)
     }
+
+    RegisterManager --> Register
+    Register --> RegisterName
     
     class InstructionParser {
         -InstructionFactory factory
