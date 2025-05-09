@@ -6,7 +6,14 @@
 - Next up: Task 3: Execute Batch Instructions API
 
 ## Recent Changes
-1. Implemented core instruction classes:
+1. Added comprehensive API testing documentation:
+   - Created docs/testing/api_test_sequence.md
+   - Documented complete test workflow
+   - Added curl commands for all endpoints
+   - Included troubleshooting tips
+   - Added expected results
+
+2. Implemented core instruction classes:
    - SET: Sets a register to a specific value
    - ADR: Adds content of one register to another
    - ADD: Adds a constant value to a register
@@ -53,7 +60,13 @@
    - TestRestTemplate for integration testing
 
 ## Recent Learnings
-1. Spring Boot dependency injection setup:
+1. API Testing Documentation:
+   - Organized testing sequence for complete coverage
+   - Structured documentation with clear sections
+   - Added troubleshooting guidelines
+   - Included expected results for verification
+
+2. Spring Boot dependency injection setup:
    - Need @Component annotations on beans
    - Constructor injection preferred over field injection
    - Proper component scanning configuration required
