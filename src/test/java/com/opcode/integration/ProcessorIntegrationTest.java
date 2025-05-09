@@ -1,7 +1,10 @@
 package com.opcode.integration;
 
+import com.opcode.model.BatchInstructionRequest;
 import com.opcode.model.InstructionRequest;
 import com.opcode.model.ProcessorResponse;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,6 +49,81 @@ public class ProcessorIntegrationTest {
         assertEquals(0, response.getBody().getRegisters().get("B"));
         assertEquals(0, response.getBody().getRegisters().get("C"));
         assertEquals(0, response.getBody().getRegisters().get("D"));
+    }
+    
+    @Test
+    void testExecuteBatchInstructions() {
+        // Arrange
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        
+        List<String> instructions = Arrays.asList("SET A 10", "SET B 20", "ADR A B");
+        BatchInstructionRequest request = new BatchInstructionRequest(instructions);
+        HttpEntity<BatchInstructionRequest> entity = new HttpEntity<>(request, headers);
+        
+        // Act
+        ResponseEntity<ProcessorResponse> response = restTemplate.postForEntity(
+            "/api/v1/instructions/batch",
+            entity,
+            ProcessorResponse.class
+        );
+        
+        // Assert
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        assertNotNull(response.getBody());
+        assertEquals("success", response.getBody().getStatus());
+        assertEquals(30, response.getBody().getRegisters().get("A"));
+        assertEquals(20, response.getBody().getRegisters().get("B"));
+        assertEquals(0, response.getBody().getRegisters().get("C"));
+        assertEquals(0, response.getBody().getRegisters().get("D"));
+    }
+    
+    @Test
+    void testExecuteBatchInstructionsWithError() {
+        // Arrange
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        
+        List<String> instructions = Arrays.asList("SET A 10", "INVALID B 20");
+        BatchInstructionRequest request = new BatchInstructionRequest(instructions);
+        HttpEntity<BatchInstructionRequest> entity = new HttpEntity<>(request, headers);
+        
+        // Act
+        ResponseEntity<ProcessorResponse> response = restTemplate.postForEntity(
+            "/api/v1/instructions/batch",
+            entity,
+            ProcessorResponse.class
+        );
+        
+        // Assert
+        assertTrue(response.getStatusCode().is4xxClientError());
+        assertNotNull(response.getBody());
+        assertEquals("error", response.getBody().getStatus());
+        assertNotNull(response.getBody().getMessage());
+        assertEquals(1, response.getBody().getExecutedInstructions());
+    }
+    
+    @Test
+    void testExecuteBatchInstructionsWithEmptyList() {
+        // Arrange
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        
+        BatchInstructionRequest request = new BatchInstructionRequest(Arrays.asList());
+        HttpEntity<BatchInstructionRequest> entity = new HttpEntity<>(request, headers);
+        
+        // Act
+        ResponseEntity<ProcessorResponse> response = restTemplate.postForEntity(
+            "/api/v1/instructions/batch",
+            entity,
+            ProcessorResponse.class
+        );
+        
+        // Assert
+        assertTrue(response.getStatusCode().is4xxClientError());
+        assertNotNull(response.getBody());
+        assertEquals("error", response.getBody().getStatus());
+        assertTrue(response.getBody().getMessage().contains("Instructions list cannot be empty"));
     }
     
     @Test

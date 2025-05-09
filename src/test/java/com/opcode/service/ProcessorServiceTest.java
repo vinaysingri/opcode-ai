@@ -1,6 +1,7 @@
 package com.opcode.service;
 
 import com.opcode.core.Processor;
+import com.opcode.exception.BatchExecutionException;
 import com.opcode.exception.InvalidInstructionException;
 import com.opcode.exception.InvalidRegisterException;
 import com.opcode.exception.InvalidSyntaxException;
@@ -10,7 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -145,5 +148,70 @@ public class ProcessorServiceTest {
         assertThrows(InvalidRegisterException.class, () -> {
             service.getRegisterValue(register);
         });
+    }
+    
+    @Test
+    void testExecuteBatchInstructions() {
+        // Arrange
+        List<String> instructions = Arrays.asList("SET A 10", "SET B 20", "ADR A B");
+        Map<String, Integer> expectedRegisters = new HashMap<>();
+        expectedRegisters.put("A", 30);
+        expectedRegisters.put("B", 20);
+        expectedRegisters.put("C", 0);
+        expectedRegisters.put("D", 0);
+        
+        when(processor.getAllRegisterValues()).thenReturn(expectedRegisters);
+        
+        // Act
+        Map<String, Integer> result = service.executeBatchInstructions(instructions);
+        
+        // Assert
+        assertAll(
+            () -> verify(processor).executeInstruction("SET A 10"),
+            () -> verify(processor).executeInstruction("SET B 20"),
+            () -> verify(processor).executeInstruction("ADR A B"),
+            () -> verify(processor).getAllRegisterValues(),
+            () -> assertEquals(expectedRegisters, result)
+        );
+    }
+    
+    @Test
+    void testExecuteBatchInstructionsWithInvalidInstruction() {
+        // Arrange
+        List<String> instructions = Arrays.asList("SET A 10", "INVALID B 20");
+        doThrow(new InvalidInstructionException("Unknown instruction: INVALID"))
+            .when(processor).executeInstruction("INVALID B 20");
+        
+        // Act & Assert
+        BatchExecutionException exception = assertThrows(BatchExecutionException.class, () -> {
+            service.executeBatchInstructions(instructions);
+        });
+        
+        assertAll(
+            () -> assertEquals(1, exception.getExecutedInstructions()),
+            () -> verify(processor).executeInstruction("SET A 10"),
+            () -> verify(processor).executeInstruction("INVALID B 20"),
+            () -> verify(processor, never()).executeInstruction("ADR A B")
+        );
+    }
+    
+    @Test
+    void testExecuteBatchInstructionsWithInvalidRegister() {
+        // Arrange
+        List<String> instructions = Arrays.asList("SET A 10", "SET X 20");
+        doThrow(new InvalidRegisterException("Invalid register: X"))
+            .when(processor).executeInstruction("SET X 20");
+        
+        // Act & Assert
+        BatchExecutionException exception = assertThrows(BatchExecutionException.class, () -> {
+            service.executeBatchInstructions(instructions);
+        });
+        
+        assertAll(
+            () -> assertEquals(1, exception.getExecutedInstructions()),
+            () -> verify(processor).executeInstruction("SET A 10"),
+            () -> verify(processor).executeInstruction("SET X 20"),
+            () -> verify(processor, never()).executeInstruction("ADR A B")
+        );
     }
 }

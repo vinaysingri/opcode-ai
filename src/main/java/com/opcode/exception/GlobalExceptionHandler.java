@@ -42,6 +42,19 @@ public class GlobalExceptionHandler {
     }
     
     /**
+     * Handles batch execution exceptions.
+     *
+     * @param ex the exception
+     * @return the error response
+     */
+    @ExceptionHandler(BatchExecutionException.class)
+    public ResponseEntity<ProcessorResponse> handleBatchExecutionException(BatchExecutionException ex) {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ProcessorResponse.batchError(ex.getMessage(), ex.getExecutedInstructions()));
+    }
+    
+    /**
      * Handles invalid syntax exceptions.
      *
      * @param ex the exception
