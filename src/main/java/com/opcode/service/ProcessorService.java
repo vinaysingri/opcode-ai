@@ -46,21 +46,20 @@ public class ProcessorService {
      */
     public Map<String, Integer> executeBatchInstructions(List<String> instructions) {
         int executedCount = 0;
-        try {
-            for (String instruction : instructions) {
-                // Increment count before execution to include the failing instruction
-                executedCount++;
+
+        for (String instruction : instructions) {
+            try {
                 processor.executeInstruction(instruction);
+                executedCount++;
+            } catch (Exception e) {
+                throw new BatchExecutionException(
+                    "Error executing instruction: " + instruction + " - " + e.getMessage(),
+                    executedCount
+                );
             }
-            return processor.getAllRegisterValues();
-        } catch (Exception e) {
-            // Decrement count since the last instruction failed
-            executedCount--;
-            throw new BatchExecutionException(
-                "Error executing instruction at index " + executedCount + ": " + instructions.get(executedCount) + " - " + e.getMessage(),
-                executedCount
-            );
         }
+
+        return processor.getAllRegisterValues();
     }
     
     /**
