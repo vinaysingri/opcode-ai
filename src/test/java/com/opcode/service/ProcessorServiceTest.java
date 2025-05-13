@@ -179,14 +179,19 @@ public class ProcessorServiceTest {
     void testExecuteBatchInstructionsWithInvalidInstruction() {
         // Arrange
         List<String> instructions = Arrays.asList("SET A 10", "INVALID B 20");
+
+        // Allow first instruction to succeed
+        doNothing().when(processor).executeInstruction("SET A 10");
+
+        // Second instruction will throw exception
         doThrow(new InvalidInstructionException("Unknown instruction: INVALID"))
             .when(processor).executeInstruction("INVALID B 20");
-        
+
         // Act & Assert
         BatchExecutionException exception = assertThrows(BatchExecutionException.class, () -> {
             service.executeBatchInstructions(instructions);
         });
-        
+
         assertAll(
             () -> assertEquals(1, exception.getExecutedInstructions()),
             () -> verify(processor).executeInstruction("SET A 10"),
@@ -199,14 +204,19 @@ public class ProcessorServiceTest {
     void testExecuteBatchInstructionsWithInvalidRegister() {
         // Arrange
         List<String> instructions = Arrays.asList("SET A 10", "SET X 20");
+
+        // Allow first instruction to succeed
+        doNothing().when(processor).executeInstruction("SET A 10");
+
+        // Second instruction will throw exception
         doThrow(new InvalidRegisterException("Invalid register: X"))
             .when(processor).executeInstruction("SET X 20");
-        
+
         // Act & Assert
         BatchExecutionException exception = assertThrows(BatchExecutionException.class, () -> {
             service.executeBatchInstructions(instructions);
         });
-        
+
         assertAll(
             () -> assertEquals(1, exception.getExecutedInstructions()),
             () -> verify(processor).executeInstruction("SET A 10"),
