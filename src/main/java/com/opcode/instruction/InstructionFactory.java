@@ -22,23 +22,15 @@ public class InstructionFactory {
             throw new InvalidInstructionException("Instruction type cannot be null");
         }
         
-        switch (type.toUpperCase()) {
-            case "SET":
-                return new SetInstruction(args);
-            case "ADR":
-                return new AdrInstruction(args);
-            case "ADD":
-                return new AddInstruction(args);
-            case "MOV":
-                return new MovInstruction(args);
-            case "INR":
-                return new InrInstruction(args);
-            case "DCR":
-                return new DcrInstruction(args);
-            case "RST":
-                return new RstInstruction(args);
-            default:
-                throw new InvalidInstructionException("Unknown instruction type: " + type);
-        }
+        return switch (type.toUpperCase()) {
+            case "SET" -> new SetInstruction(args);
+            case "ADR" -> new AdrInstruction(args);
+            case "ADD" -> new AddInstruction(args);
+            case "MOV" -> new MovInstruction(args);
+            case "INR" -> new InrInstruction(args);
+            case "DCR" -> new DcrInstruction(args);
+            case "RST" -> new RstInstruction(args);
+            default -> throw new InvalidInstructionException("Unknown instruction type: " + type);
+        };
     }
 }

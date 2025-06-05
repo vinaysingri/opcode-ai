@@ -71,9 +71,9 @@ public class InstructionFactoryTest {
         
         // Assert
         assertAll(
-            () -> assertTrue(instruction1 instanceof SetInstruction),
-            () -> assertTrue(instruction2 instanceof SetInstruction),
-            () -> assertTrue(instruction3 instanceof SetInstruction)
+            () -> assertTrue(instruction1 instanceof SetInstruction instruction1Cast),
+            () -> assertTrue(instruction2 instanceof SetInstruction instruction2Cast),
+            () -> assertTrue(instruction3 instanceof SetInstruction instruction3Cast)
         );
     }
     
@@ -84,6 +84,6 @@ public class InstructionFactoryTest {
         
         // Assert
         assertNotNull(instruction);
-        assertTrue(instruction instanceof SetInstruction);
+        assertTrue(instruction instanceof SetInstruction setInstruction);
     }
 }
